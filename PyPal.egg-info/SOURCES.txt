@@ -1,0 +1,9 @@
+README
+setup.cfg
+setup.py
+PyPal.egg-info/PKG-INFO
+PyPal.egg-info/SOURCES.txt
+PyPal.egg-info/dependency_links.txt
+PyPal.egg-info/top_level.txt
+PyPal.egg-info/zip-safe
+tests/__init__.py

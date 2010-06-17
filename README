@@ -1,0 +1,3 @@
+Python interface to the PayPal Web Payments Pro API
+
+- Currently only supports NVP interaction

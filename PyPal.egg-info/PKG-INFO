@@ -1,0 +1,23 @@
+Metadata-Version: 1.0
+Name: PyPal
+Version: 0.1beta
+Summary: PayPal API interface
+Home-page: http://orpo.co.uk/code/
+Author: Nick Snell
+Author-email: nick@orpo.co.uk
+License: BSD
+Description: PayPal API interface
+        
+        Python interface to the PayPal Web Payments Pro API.
+        
+        Currently only supports NVP interactions and a small
+        subset of the API. More to come....
+        
+Platform: UNKNOWN
+Classifier: Development Status :: 4 - Beta
+Classifier: Environment :: Web Environment
+Classifier: License :: OSI Approved :: BSD License
+Classifier: Natural Language :: English
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python
+Classifier: Topic :: Internet :: WWW/HTTP :: Dynamic Content
