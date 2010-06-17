@@ -210,7 +210,7 @@ class PayPalAPI(object):
 		
 		return response.payerid
 		
-	def do_express_checkout_payment(self, payerid, items=None, payment=None, shipping=None token=None, **kwargs):
+	def do_express_checkout_payment(self, payerid, items=None, payment=None, shipping=None, token=None, **kwargs):
 		"""Run the GetExpressCheckoutDetails API method - returns the current express checkout token on success"""
 		
 		request = self._build_request()
