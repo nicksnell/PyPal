@@ -31,6 +31,8 @@ class PayPalAPI(object):
 		self.debug = debug
 		
 		self._token = None
+		
+		self.last_request = None
 		self.last_response = None
 		
 		if self.mode == PAYPAL_MODE_LIVE:
@@ -151,7 +153,9 @@ class PayPalAPI(object):
 		
 		if self.debug:
 			print request
-			
+		
+		self.last_request = request
+		
 		try:
 			response = self._call(request)
 		except PayPalCallError, e:
@@ -160,10 +164,11 @@ class PayPalAPI(object):
 		if self.debug:
 			print response
 		
+		self.last_response = response
+		
 		if not response.success:
 			raise PayPalExpressCheckoutError(u'PayPal Error: %s %s' % (response.status, response.error_msg))
 		
-		self.last_response = response
 		self.token = response.token
 		
 		return self.url % self.token
@@ -181,7 +186,9 @@ class PayPalAPI(object):
 		
 		if self.debug:
 			print request
-			
+		
+		self.last_request = request
+		
 		try:
 			response = self._call(request)
 		except PayPalCallError, e:
@@ -190,10 +197,11 @@ class PayPalAPI(object):
 		if self.debug:
 			print response
 		
+		self.last_response = response
+		
 		if not response.success:
 			raise PayPalExpressCheckoutError(u'PayPal Error: %s %s' % (response.status, response.error_msg))
 		
-		self.last_response = response
 		self.token = response.token
 		
 		return response.payerid
@@ -231,7 +239,9 @@ class PayPalAPI(object):
 			
 		if self.debug:
 			print request
-			
+		
+		self.last_request = request
+		
 		try:
 			response = self._call(request)
 		except PayPalCallError, e:
@@ -239,10 +249,10 @@ class PayPalAPI(object):
 			
 		if self.debug:
 			print response
-			
+		
+		self.last_response = response
+		
 		if not response.success:
 			raise PayPalExpressCheckoutError(u'PayPal Error: %s %s' % (response.status, response.error_msg))
 			
-		self.last_response = response
-		
 		return response

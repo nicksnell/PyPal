@@ -63,7 +63,7 @@ class PaymentRequestItem(PaymentRequest):
 		self.amt = str(amt) if amt else ''
 		self.quantity = str(quantity) if quantity else ''
 		self.number = str(number) if number else ''
-		self.sales_tax = str(tax) if tax else ''
+		self.tax = str(tax) if tax else ''
 		self.url = url
 	
 	def get_data(self):
