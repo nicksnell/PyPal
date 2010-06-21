@@ -139,7 +139,7 @@ class PaymentRequestPayment(PaymentRequest):
 	def get_data(self):
 		item_data = {
 			'AMT': self.amt,
-			'CURRENCY': self.currency,
+			'CURRENCYCODE': self.currency,
 			'ITEMAMT': self.itemamt,
 			'SHIPPINGAMT': self.shippingamt,
 			'INSURANCEAMT': self.insuranceamt,
