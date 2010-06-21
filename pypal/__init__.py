@@ -13,7 +13,7 @@ from settings import *
 
 __all__ = ('PayPalAPI',)
 
-PAYPAL_API_VERSION = '60.0'
+PAYPAL_API_VERSION = '63.0'
 PAYPAL_MODE_LIVE = 1
 PAYPAL_MODE_SANDBOX = 2
 
@@ -48,15 +48,8 @@ class PayPalAPI(object):
 		
 	token = property(get_token, set_token)
 	
-	def _build_request(self):
-		mandatory_data = {
-			'USER': self.user,
-			'PWD': self.passwd,
-			'SIGNATURE': self.signature,
-			'VERSION': PAYPAL_API_VERSION,
-		}
-		
-		return PayPalRequest(self.endpont, data=mandatory_data)
+	def _build_request(self, method):
+		return PayPalRequest(self.endpont, self.user, self.passwd, self.signature, PAYPAL_API_VERSION, method)
 		
 	def _call(self, request):
 		"""Call PayPal API"""
@@ -65,9 +58,6 @@ class PayPalAPI(object):
 		
 		attempt = 1
 		last_error = ''
-		
-		if self.debug:
-			print request.data
 		
 		# We must make a urllib request here
 		req = urllib2.Request(request.url, request.data)
@@ -107,10 +97,9 @@ class PayPalAPI(object):
 							token=None, **kwargs):
 		"""Run the SetExpressCheckout API method - returns URL to PayPal express checkout on success"""
 		
-		request = self._build_request()
+		request = self._build_request(u'SetExpressCheckout')
 		
 		set_express_checkout_data = {
-			'METHOD': u'SetExpressCheckout',
 			'TOKEN': token or self.token or u'',
 			'LOCALECODE': self.locale,
 			
@@ -182,10 +171,9 @@ class PayPalAPI(object):
 	def get_express_checkout_details(self, token=None):
 		"""Run the GetExpressCheckoutDetails API method - returns the current express checkout token on success"""
 		
-		request = self._build_request()
+		request = self._build_request(u'GetExpressCheckoutDetails')
 		
 		get_express_checkout_details_data = {
-			'METHOD': u'GetExpressCheckoutDetails',
 			'TOKEN': token or self.token or u'',
 		}
 		
@@ -213,15 +201,14 @@ class PayPalAPI(object):
 	def do_express_checkout_payment(self, payerid, items=None, payment=None, shipping=None, token=None, **kwargs):
 		"""Run the GetExpressCheckoutDetails API method - returns the current express checkout token on success"""
 		
-		request = self._build_request()
+		request = self._build_request(u'DoExpressCheckoutPayment')
 		
 		do_express_checkout_details_data = {
-			'METHOD': u'DoExpressCheckoutPayment',
 			'TOKEN': token or self.token or u'',
 			'PAYERID': payerid,
 		}
 		
-		request.add_data(get_express_checkout_details_data)
+		request.add_data(do_express_checkout_details_data)
 		
 		# Add the items to our request
 		if items:

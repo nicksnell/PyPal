@@ -6,7 +6,7 @@ from socket import gethostname
 class PayPalRequest(object):
 	"""Object representation of a PayPal API request"""
 	
-	def __init__(self, url, data=None, headers={}):
+	def __init__(self, url, user, passwd, signature, version, method, data=None, headers={}):
 		"""Setup the request"""
 		
 		self.headers = {
@@ -17,6 +17,12 @@ class PayPalRequest(object):
 		}
 		
 		self.url = url
+		
+		self.user = user
+		self.passwd = passwd
+		self.signature = signature
+		self.version = version
+		self.method = method
 		
 		# Setup data
 		self._data = {}
@@ -49,7 +55,20 @@ class PayPalRequest(object):
 		self._data.update(data)
 	
 	def get_data(self):
-		return urllib.urlencode(self._data)
+		# Get the required elements in the correct order
+		items = [
+			('USER', self.user),
+			('PWD', self.passwd),
+			('SIGNATURE', self.signature),
+			('VERSION', self.version),
+			('METHOD', self.method),
+		]
+		
+		# Get the other request paramaters
+		data_items = [(k, v) for k, v in self._data.items() if v]
+		items.extend(data_items)
+		
+		return urllib.urlencode(items)
 	
 	def set_data(self, data):
 		self._data = data

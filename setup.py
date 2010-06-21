@@ -34,7 +34,7 @@ setup(
 		'Topic :: Internet :: WWW/HTTP :: Dynamic Content',
 	],
 	zip_safe=True,
-	packages=find_packages(['pypal',]),
+	packages=find_packages(exclude=['tests',]),
 	dependency_links = [
 	
 	],

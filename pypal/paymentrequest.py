@@ -10,17 +10,32 @@ class PaymentRequest(object):
 			del kwargs['request_id']
 		else:
 			self._request_id = 0
-	
+		
+		self._item_number = None
+		
 	def _get_data(self, base={}):
 		data = {}
 		
 		for key, value in base.items():
-			data['L_PAYMENT_REQUEST_%s_%s' % (self.request_id, key)] = value
+			prefix = ''
+			
+			if self.item_number is not None:
+				prefix = 'L_'
+			
+			data['%sPAYMENTREQUEST_%s_%s' % (prefix, self.request_id, key)] = value
 			
 		return data
 	
 	def get_data(self):
 		raise NotImplementedError
+		
+	def get_item_number(self):
+		return self._item_number
+		
+	def set_item_number(self, v):
+		self._item_number = v
+		
+	item_number = property(get_item_number, set_item_number)
 	
 	def get_request_id(self):
 		return self._request_id
@@ -32,7 +47,7 @@ class PaymentRequest(object):
 	
 class PaymentRequestItem(PaymentRequest):
 
-	def __init__(self, name, description, amt, quantity, number=None, sales_tax=None, url=None, *args, **kwargs):
+	def __init__(self, name, description, amt, quantity, number=None, tax=None, url=None, *args, **kwargs):
 		# @@ Add support for ITEMWEIGHTVALUE, ITEMLENGTHVALUE, ITEMWIDTHVALUE, ITEMHEIGHTVALUE
 		
 		super(PaymentRequestItem, self).__init__(*args, **kwargs)
@@ -48,16 +63,8 @@ class PaymentRequestItem(PaymentRequest):
 		self.amt = str(amt) if amt else ''
 		self.quantity = str(quantity) if quantity else ''
 		self.number = str(number) if number else ''
-		self.sales_tax = str(sales_tax) if sales_tax else ''
+		self.sales_tax = str(tax) if tax else ''
 		self.url = url
-	
-	def get_item_number(self):
-		return self._item_number
-		
-	def set_item_number(self, v):
-		self._item_number = v
-		
-	item_number = property(get_item_number, set_item_number)
 	
 	def get_data(self):
 		item_data = {
@@ -66,7 +73,7 @@ class PaymentRequestItem(PaymentRequest):
 			'AMT%s' % self.item_number: self.amt or '',
 			'NUMBER%s' % self.item_number: self.number or '',
 			'QTY%s' % self.item_number: self.quantity or '',
-			'TAXAMT%s' % self.item_number: self.sales_tax or '',
+			'TAXAMT%s' % self.item_number: self.tax or '',
 			'ITEMURL%s' % self.item_number: self.url or ''
 		}
 		
@@ -105,7 +112,7 @@ class PaymentRequestPayment(PaymentRequest):
 	
 	def __init__(self, amt, currency=u'USD', itemamt=u'', shippingamt=u'', insuranceamt=u'', shipdiscamt=u'',
 				insuranceoffered=u'', handlingamt=u'', taxamt=u'', desc=u'', custom=u'', invnum=u'', notifyurl=u'',
-				notetext=u'', transactionid=u'', allowedpaymentmethod=u'', paymentaction=u'', paymentrequestid=u'',
+				notetext=u'', transactionid=u'', allowedpaymentmethod=u'', paymentaction=u'Sale', paymentrequestid=u'',
 				*args, **kwargs):
 				
 		super(PaymentRequestPayment, self).__init__(*args, **kwargs)
